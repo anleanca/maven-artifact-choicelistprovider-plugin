@@ -19,7 +19,7 @@ public class MavenCentralSearchServiceTest {
 		MavenCentralSearchService t = new MavenCentralSearchService();
 		try {
 			List<String> retrieveVersions = t.retrieveVersions("", "org.apache.tomcat", "tomcat", ".tar.gz",
-					ValidAndInvalidClassifier.getDefault());
+					ValidAndInvalidClassifier.getDefault(), "");
 			System.out.println(retrieveVersions.size());
 			for (String current : retrieveVersions) {
 				System.out.println(current);

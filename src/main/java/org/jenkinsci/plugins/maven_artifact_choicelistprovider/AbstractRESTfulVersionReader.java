@@ -65,9 +65,9 @@ public abstract class AbstractRESTfulVersionReader implements IVersionReader {
 	}
 
 	public List<String> retrieveVersions(String pRepositoryId, String pGroupId, String pArtifactId, String pPackaging,
-			ValidAndInvalidClassifier pClassifier) throws VersionReaderException {
+			ValidAndInvalidClassifier pClassifier, String pOutputFilter) throws VersionReaderException {
 		try {
-			final Set<String> result = callService(pRepositoryId, pGroupId, pArtifactId, pPackaging, pClassifier);
+			final Set<String> result = callService(pRepositoryId, pGroupId, pArtifactId, pPackaging, pClassifier, pOutputFilter);
 			if(LOGGER.isLoggable(Level.FINE)) {
 				LOGGER.log(Level.FINE, "result: " + result.size());
 				for(String current : result) {
@@ -153,5 +153,5 @@ public abstract class AbstractRESTfulVersionReader implements IVersionReader {
 	public abstract String getRESTfulServiceEndpoint();
 
 	public abstract Set<String> callService(final String pRepositoryId, final String pGroupId, final String pArtifactId, final String pPackaging,
-			final ValidAndInvalidClassifier pClassifier);
+			final ValidAndInvalidClassifier pClassifier, final String pOutputFilter);
 }

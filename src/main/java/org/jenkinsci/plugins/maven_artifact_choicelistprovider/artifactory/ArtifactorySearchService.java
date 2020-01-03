@@ -1,9 +1,9 @@
 package org.jenkinsci.plugins.maven_artifact_choicelistprovider.artifactory;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -41,7 +41,7 @@ public class ArtifactorySearchService extends AbstractRESTfulVersionReader imple
     }
 
     @Override
-    public Set<String> callService(String pRepositoryId, String pGroupId, String pArtifactId, String pPackaging, ValidAndInvalidClassifier pClassifier) {
+    public Set<String> callService(String pRepositoryId, String pGroupId, String pArtifactId, String pPackaging, ValidAndInvalidClassifier pClassifier, final String pOutputFilter) {
         final MultivaluedMap<String, String> requestParams = new StandardRESTfulParameterBuilder().create("", pGroupId, pArtifactId, pPackaging, pClassifier);
 
         Set<String> retVal = new LinkedHashSet<String>();
@@ -52,22 +52,29 @@ public class ArtifactorySearchService extends AbstractRESTfulVersionReader imple
             LOGGER.info("response from Artifactory Service is NULL.");
         } else {
             LOGGER.info("parse result from artifactory service to JSON");
-            retVal = parseResult(plainResult, pPackaging);
+            retVal = parseResult(plainResult, pPackaging, pOutputFilter);
         }
 
         return retVal;
     }
 
-    Set<String> parseResult(final String pContent, final String pPackaging) {
+    Set<String> parseResult(final String pContent, final String pPackaging, final String pOutputFilter) {
         final Set<String> retVal = new LinkedHashSet<String>();
         try {
             final ArtifactoryResultModel fromJson = new Gson().fromJson(pContent, ArtifactoryResultModel.class);
+
+            List<ArtifactoryResultEntryModel> results = Arrays.asList(fromJson.getResults());
+            Collections.sort(results);
+
+            fromJson.results = (ArtifactoryResultEntryModel[]) results.toArray();
+
             for (ArtifactoryResultEntryModel current : fromJson.getResults()) {
 
                 // XXX: As the Artifactory Service is not able to filter on
                 // packaging level, we do it in the code.
                 if (validPackaging(current.getUri(), pPackaging)) {
-                    retVal.add(current.getUri());
+                    retVal.add(this.filterOutput(current.getUri(), pOutputFilter));
+//                    retVal.add(current.getUri());
                 }
             }
         } catch (Exception e) {
@@ -76,6 +83,28 @@ public class ArtifactorySearchService extends AbstractRESTfulVersionReader imple
         return retVal;
     }
 
+    private String filterOutput(String pUri, String pOutputFilter) {
+
+        StringBuilder outString = new StringBuilder();
+
+        if (pOutputFilter.trim().equals("")) {
+            return pUri;
+        }
+
+        List<Integer> partsIndexList = Arrays.stream(pOutputFilter.split("\\|"))
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+
+        String[] parts = pUri.split("/");
+
+        List<String>partsList = Arrays.stream(pUri.split("/")).collect(Collectors.toList());
+
+        return partsIndexList.stream()
+                .map( partIndex -> (partIndex < 0) ? (partsList.size()+partIndex) : partIndex )
+                .filter(idx -> (idx >= 0 && partsList.size() > idx))
+                .map(partsList::get)
+                .collect(Collectors.joining(" | "));
+    }
     private boolean validPackaging(final String pArtifactURL, String pRequestedPackaging) {
         if (StringUtils.isEmpty(pRequestedPackaging.trim())) {
             return true;
@@ -92,7 +121,7 @@ public class ArtifactorySearchService extends AbstractRESTfulVersionReader imple
  *
  * @author stephan.watermeyer, Diebold Nixdorf
  */
-class ArtifactoryResultEntryModel {
+class ArtifactoryResultEntryModel  implements Comparable{
 
     @SerializedName("uri")
     String uri;
@@ -107,6 +136,12 @@ class ArtifactoryResultEntryModel {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        ArtifactoryResultEntryModel obj = (ArtifactoryResultEntryModel) o;
+        return this.getUri().compareTo(obj.getUri());
     }
 
 }

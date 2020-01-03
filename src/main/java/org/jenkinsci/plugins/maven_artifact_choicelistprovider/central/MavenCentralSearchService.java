@@ -51,7 +51,7 @@ public class MavenCentralSearchService implements IVersionReader {
 
 	@Override
 	public List<String> retrieveVersions(String pRepositoryId, String pGroupId, String pArtifactId, String pPackaging,
-			ValidAndInvalidClassifier pClassifier) throws VersionReaderException {
+			ValidAndInvalidClassifier pClassifier, String pOutputFilter) throws VersionReaderException {
 		try {
 			final String targetURL = createURL(pGroupId, pArtifactId, pPackaging, pClassifier);
 			LOGGER.fine("target url:" + targetURL);

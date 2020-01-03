@@ -37,7 +37,7 @@ public class NexusLuceneSearchService extends AbstractRESTfulVersionReader imple
      * https://repository.sonatype.org/nexus-indexer-lucene-plugin/default/docs/path__lucene_search.html
      */
     @Override
-    public Set<String> callService(final String pRepositoryId, final String pGroupId, final String pArtifactId, final String pPackaging, final ValidAndInvalidClassifier pClassifier) {
+    public Set<String> callService(final String pRepositoryId, final String pGroupId, final String pArtifactId, final String pPackaging, final ValidAndInvalidClassifier pClassifier, final String pOutputFilter) {
 
         final MultivaluedMap<String, String> requestParams = new StandardRESTfulParameterBuilder().create(pRepositoryId, pGroupId, pArtifactId, pPackaging, pClassifier);
 

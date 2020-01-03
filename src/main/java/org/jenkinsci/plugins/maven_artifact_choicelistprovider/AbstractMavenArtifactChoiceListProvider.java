@@ -46,6 +46,7 @@ public abstract class AbstractMavenArtifactChoiceListProvider extends ChoiceList
     private String packaging;
     private String classifier;
     private boolean reverseOrder;
+    private String outputFilter;
 
     /**
      * Initializes the choicelist with at the artifactId.
@@ -62,7 +63,7 @@ public abstract class AbstractMavenArtifactChoiceListProvider extends ChoiceList
     public List<String> getChoiceList() {
 
         LOGGER.log(Level.FINE, "retrieve the versions from the repository");
-        final Map<String, String> mChoices = readURL(createServiceInstance(), getRepositoryId(), getGroupId(), getArtifactId(), getPackaging(), getClassifier(), getReverseOrder());
+        final Map<String, String> mChoices = readURL(createServiceInstance(), getRepositoryId(), getGroupId(), getArtifactId(), getPackaging(), getClassifier(), getReverseOrder(), getOutputFilter());
         // FIXME: CHANGE-1: Return only the keys, that are shorter then the values
         // return new ArrayList<String>(mChoices.keySet());
         return new ArrayList<String>(mChoices.values());
@@ -108,12 +109,12 @@ public abstract class AbstractMavenArtifactChoiceListProvider extends ChoiceList
      * @return never null
      */
     public static Map<String, String> readURL(final IVersionReader pInstance, final String pRepositoryId, final String pGroupId, final String pArtifactId, final String pPackaging,
-            String pClassifier, final boolean pReverseOrder) {
+            String pClassifier, final boolean pReverseOrder, final String pOutputFilter) {
         Map<String, String> retVal = new LinkedHashMap<String, String>();
         try {
             ValidAndInvalidClassifier classifierBox = ValidAndInvalidClassifier.fromString(pClassifier);
 
-            List<String> choices = pInstance.retrieveVersions(pRepositoryId, pGroupId, pArtifactId, pPackaging, classifierBox);
+            List<String> choices = pInstance.retrieveVersions(pRepositoryId, pGroupId, pArtifactId, pPackaging, classifierBox, pOutputFilter);
 
             if (pReverseOrder)
                 Collections.reverse(choices);
@@ -177,6 +178,11 @@ public abstract class AbstractMavenArtifactChoiceListProvider extends ChoiceList
     }
 
     @DataBoundSetter
+    public void setOutputFilter(String outputFilter) {
+        this.outputFilter = StringUtils.trim(outputFilter);
+    }
+
+    @DataBoundSetter
     public void setReverseOrder(boolean reverseOrder) {
         this.reverseOrder = reverseOrder;
     }
@@ -205,9 +211,12 @@ public abstract class AbstractMavenArtifactChoiceListProvider extends ChoiceList
     public boolean getReverseOrder() {
         return reverseOrder;
     }
-
     public String getRepositoryId() {
         return repositoryId;
+    }
+
+    public String getOutputFilter() {
+        return this.outputFilter;
     }
 
 }

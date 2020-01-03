@@ -22,7 +22,7 @@ public class Nexus3RestApiSearchServiceTest extends TestCase {
         s.setUserName("TBD");
         s.setUserPassword("TBD");
         List<String> retrieveVersions = s.retrieveVersions("maven-central", "org.apache.ant", "ant", "",
-                ValidAndInvalidClassifier.getDefault());
+                ValidAndInvalidClassifier.getDefault(), "");
         for (String current : retrieveVersions) {
             System.out.println(current);
         }

@@ -5,7 +5,7 @@ import java.util.List;
 public interface IVersionReader {
 
 	public List<String> retrieveVersions(String pRepositoryId, String pGroupId, String pArtifactId, String pPackaging,
-			ValidAndInvalidClassifier pAcceptedClassifier) throws VersionReaderException;
+			ValidAndInvalidClassifier pAcceptedClassifier, String pOutputFilter) throws VersionReaderException;
 
 	public void setUserName(final String pUserName);
 

@@ -33,7 +33,7 @@ public class Nexus3RestApiSearchService extends AbstractRESTfulVersionReader imp
 
     @Override
     public Set<String> callService(final String pRepositoryId, final String pGroupId, final String pArtifactId, final String pPackaging,
-            final ValidAndInvalidClassifier pClassifier) {
+            final ValidAndInvalidClassifier pClassifier, final String pOutputFilter) {
 
         // init empty
         Set<String> retVal = new TreeSet<>();

@@ -84,7 +84,7 @@ public class NexusChoiceListProvider extends AbstractMavenArtifactChoiceListProv
         @POST
         public FormValidation doTest(@AncestorInPath Item pItem, @QueryParameter String url, @QueryParameter String credentialsId, @QueryParameter String repositoryId,
                 @QueryParameter String groupId, @QueryParameter String artifactId, @QueryParameter String packaging, @QueryParameter String classifier,
-                @QueryParameter boolean reverseOrder) {
+                @QueryParameter boolean reverseOrder, @QueryParameter String outputFilter) {
 
             // SECURITY-1022
             pItem.checkPermission(Job.CONFIGURE);
@@ -96,13 +96,13 @@ public class NexusChoiceListProvider extends AbstractMavenArtifactChoiceListProv
             if (c != null) {
                 service.setCredentials(c.getUsername(), c.getPassword().getPlainText());
             }
-            return super.performTest(service, repositoryId, groupId, artifactId, packaging, classifier, reverseOrder);
+            return super.performTest(service, repositoryId, groupId, artifactId, packaging, classifier, reverseOrder, outputFilter);
         }
 
         @Override
         protected Map<String, String> wrapTestConnection(IVersionReader pService, String pRepositoryId, String pGroupId, String pArtifactId, String pPackaging, String pClassifier,
-                boolean pReverseOrder) {
-            return readURL(pService, pRepositoryId, pGroupId, pArtifactId, pPackaging, pClassifier, pReverseOrder);
+                boolean pReverseOrder, final String pOutputFilter) {
+            return readURL(pService, pRepositoryId, pGroupId, pArtifactId, pPackaging, pClassifier, pReverseOrder,pOutputFilter);
         }
 
         public FormValidation doCheckUrl(@QueryParameter String url) {
