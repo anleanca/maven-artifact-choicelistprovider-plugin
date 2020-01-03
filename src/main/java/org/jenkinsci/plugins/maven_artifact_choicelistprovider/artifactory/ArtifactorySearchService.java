@@ -58,6 +58,13 @@ public class ArtifactorySearchService extends AbstractRESTfulVersionReader imple
         return retVal;
     }
 
+    /**
+     *
+     * @param pContent
+     * @param pPackaging
+     * @param pOutputFilter
+     * @return
+     */
     Set<String> parseResult(final String pContent, final String pPackaging, final String pOutputFilter) {
         final Set<String> retVal = new LinkedHashSet<String>();
         try {
@@ -83,9 +90,13 @@ public class ArtifactorySearchService extends AbstractRESTfulVersionReader imple
         return retVal;
     }
 
+    /**
+     *
+     * @param pUri
+     * @param pOutputFilter
+     * @return
+     */
     private String filterOutput(String pUri, String pOutputFilter) {
-
-        StringBuilder outString = new StringBuilder();
 
         if (pOutputFilter.trim().equals("")) {
             return pUri;
@@ -95,8 +106,6 @@ public class ArtifactorySearchService extends AbstractRESTfulVersionReader imple
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
 
-        String[] parts = pUri.split("/");
-
         List<String>partsList = Arrays.stream(pUri.split("/")).collect(Collectors.toList());
 
         return partsIndexList.stream()
@@ -105,6 +114,13 @@ public class ArtifactorySearchService extends AbstractRESTfulVersionReader imple
                 .map(partsList::get)
                 .collect(Collectors.joining(" | "));
     }
+
+    /**
+     *
+     * @param pArtifactURL
+     * @param pRequestedPackaging
+     * @return
+     */
     private boolean validPackaging(final String pArtifactURL, String pRequestedPackaging) {
         if (StringUtils.isEmpty(pRequestedPackaging.trim())) {
             return true;
