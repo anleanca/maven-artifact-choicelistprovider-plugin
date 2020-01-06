@@ -3,15 +3,14 @@ package org.jenkinsci.plugins.maven_artifact_choicelistprovider.artifactory;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.commons.lang.StringUtils;
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.AbstractRESTfulVersionReader;
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.IVersionReader;
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.ValidAndInvalidClassifier;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.*;
 import org.jenkinsci.plugins.maven_artifact_choicelistprovider.nexus.StandardRESTfulParameterBuilder;
 
 import com.google.gson.Gson;
@@ -70,17 +69,19 @@ public class ArtifactorySearchService extends AbstractRESTfulVersionReader imple
         try {
             final ArtifactoryResultModel fromJson = new Gson().fromJson(pContent, ArtifactoryResultModel.class);
 
+            final OutputFilterModel joOutputFilter = new Gson().fromJson(pOutputFilter, OutputFilterModel.class);
+
+
             List<ArtifactoryResultEntryModel> results = Arrays.asList(fromJson.getResults());
-            Collections.sort(results);
+            Collections.sort(results, new VersionNumberComparator(joOutputFilter));
 
             fromJson.results = (ArtifactoryResultEntryModel[]) results.toArray();
 
             for (ArtifactoryResultEntryModel current : fromJson.getResults()) {
 
-                // XXX: As the Artifactory Service is not able to filter on
-                // packaging level, we do it in the code.
                 if (validPackaging(current.getUri(), pPackaging)) {
-                    retVal.add(this.filterOutput(current.getUri(), pOutputFilter));
+                    retVal.add(this.filterOutput(current.getUri(), joOutputFilter));
+//                    retVal.add(this.filterOutput(current.getUri(), pOutputFilter));
 //                    retVal.add(current.getUri());
                 }
             }
@@ -90,29 +91,20 @@ public class ArtifactorySearchService extends AbstractRESTfulVersionReader imple
         return retVal;
     }
 
-    /**
-     *
-     * @param pUri
-     * @param pOutputFilter
-     * @return
-     */
-    private String filterOutput(String pUri, String pOutputFilter) {
 
-        if (pOutputFilter.trim().equals("")) {
+    private String filterOutput(String pUri, OutputFilterModel joOutputFilter) {
+
+        if (null == joOutputFilter || joOutputFilter.getOutput() == null || joOutputFilter.getOutput().size()==0) {
             return pUri;
         }
 
-        List<Integer> partsIndexList = Arrays.stream(pOutputFilter.split("\\|"))
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
+        List<String>partsList = Arrays.stream(pUri.split(Pattern.quote(joOutputFilter.getSplit()))).collect(Collectors.toList());
 
-        List<String>partsList = Arrays.stream(pUri.split("/")).collect(Collectors.toList());
-
-        return partsIndexList.stream()
+        return joOutputFilter.getOutput().stream()
                 .map( partIndex -> (partIndex < 0) ? (partsList.size()+partIndex) : partIndex )
                 .filter(idx -> (idx >= 0 && partsList.size() > idx))
                 .map(partsList::get)
-                .collect(Collectors.joining(" | "));
+                .collect(Collectors.joining(joOutputFilter.getDelimiter()));
     }
 
     /**
@@ -132,47 +124,8 @@ public class ArtifactorySearchService extends AbstractRESTfulVersionReader imple
 
 }
 
+
 /**
- * Helper Class to parse the JSON
  *
- * @author stephan.watermeyer, Diebold Nixdorf
  */
-class ArtifactoryResultEntryModel  implements Comparable{
 
-    @SerializedName("uri")
-    String uri;
-
-    public ArtifactoryResultEntryModel() {
-        // Important to do nothing
-    }
-
-    public String getUri() {
-        return uri;
-    }
-
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        ArtifactoryResultEntryModel obj = (ArtifactoryResultEntryModel) o;
-        return this.getUri().compareTo(obj.getUri());
-    }
-
-}
-
-class ArtifactoryResultModel {
-
-    @SerializedName("results")
-    ArtifactoryResultEntryModel[] results = new ArtifactoryResultEntryModel[] {};
-
-    public ArtifactoryResultModel() {
-        // Important to do nothing
-    }
-
-    public ArtifactoryResultEntryModel[] getResults() {
-        return results;
-    }
-
-}

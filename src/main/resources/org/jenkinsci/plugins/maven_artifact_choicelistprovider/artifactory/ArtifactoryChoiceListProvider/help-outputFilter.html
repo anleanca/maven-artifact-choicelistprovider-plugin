@@ -2,5 +2,14 @@
     <b>Optional:</b> The artifacts list can be processed by setting this parameter.
     <p>Parameter takes numbers separated by |</p>
     <p>The repository URL will be split by "/" and you can specify the index of each chunk which should be present in the select box.</p>
-    <p>For example: -2|-3</p>
+    <p> Defaults:
+        <ul>
+            <li>delimiter: ,</li>
+            <li>split: /</li>
+        </ul>
+    </p>
+    <p>For example: {"sort":"-2"}</p>
+    <p>For example: {"split": "/", "sort":"-2", "delimiter":"|"}</p>
+    <p>For example: {"split": "/", "sort":"-2", "delimiter":"|", "output":[-2, -3]}</p>
+    <p>For example: {"split": "/", "sort":"-2", "delimiter":"|", "output":["-2", "-3"]}</p>
 </div>

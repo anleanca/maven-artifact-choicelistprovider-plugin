@@ -2,7 +2,7 @@ package org.jenkinsci.plugins.maven_artifact_choicelistprovider;
 
 import static org.junit.Assert.*;
 
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.ValidAndInvalidClassifier;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.ValidAndInvalidClassifier;
 import org.junit.Test;
 
 public class ValidAndInvalidClassifierTest {

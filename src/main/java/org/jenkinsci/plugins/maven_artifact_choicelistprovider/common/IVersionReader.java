@@ -1,11 +1,11 @@
-package org.jenkinsci.plugins.maven_artifact_choicelistprovider;
+package org.jenkinsci.plugins.maven_artifact_choicelistprovider.common;
 
 import java.util.List;
 
 public interface IVersionReader {
 
 	public List<String> retrieveVersions(String pRepositoryId, String pGroupId, String pArtifactId, String pPackaging,
-			ValidAndInvalidClassifier pAcceptedClassifier, String pOutputFilter) throws VersionReaderException;
+										 ValidAndInvalidClassifier pAcceptedClassifier, String pOutputFilter) throws VersionReaderException;
 
 	public void setUserName(final String pUserName);
 

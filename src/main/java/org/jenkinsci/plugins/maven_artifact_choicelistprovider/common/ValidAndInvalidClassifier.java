@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.maven_artifact_choicelistprovider;
+package org.jenkinsci.plugins.maven_artifact_choicelistprovider.common;
 
 import java.util.HashSet;
 import java.util.Set;

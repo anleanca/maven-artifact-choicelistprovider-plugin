@@ -2,8 +2,8 @@ package org.jenkinsci.plugins.maven_artifact_choicelistprovider.nexus3;
 
 import java.util.List;
 
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.ValidAndInvalidClassifier;
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.VersionReaderException;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.ValidAndInvalidClassifier;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.VersionReaderException;
 import org.junit.After;
 import org.junit.Test;
 

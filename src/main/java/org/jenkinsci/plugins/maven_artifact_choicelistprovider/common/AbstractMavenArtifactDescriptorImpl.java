@@ -1,8 +1,10 @@
-package org.jenkinsci.plugins.maven_artifact_choicelistprovider;
+package org.jenkinsci.plugins.maven_artifact_choicelistprovider.common;
 
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.AbstractMavenArtifactChoiceListProvider;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.IVersionReader;
 import org.kohsuke.stapler.QueryParameter;
 
 import hudson.model.Descriptor;
@@ -49,7 +51,7 @@ public abstract class AbstractMavenArtifactDescriptorImpl extends Descriptor<Cho
     }
 
     public FormValidation performTest(final IVersionReader pService, @QueryParameter String repositoryId, @QueryParameter String groupId, @QueryParameter String artifactId,
-            @QueryParameter String packaging, @QueryParameter String classifier, @QueryParameter boolean reverseOrder, @QueryParameter String outputFilter) {
+                                      @QueryParameter String packaging, @QueryParameter String classifier, @QueryParameter boolean reverseOrder, @QueryParameter String outputFilter) {
         if (StringUtils.isEmpty(packaging) && !StringUtils.isEmpty(classifier)) {
             return FormValidation
                     .error("You have choosen an empty Packaging configuration but have configured a Classifier. Please either define a Packaging value or remove the Classifier");

@@ -1,6 +1,6 @@
 package org.jenkinsci.plugins.maven_artifact_choicelistprovider.nexus;
 
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.RESTfulParameterBuilder;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.RESTfulParameterBuilder;
 
 /**
  * Valid for Nexus2 and Artifactory.

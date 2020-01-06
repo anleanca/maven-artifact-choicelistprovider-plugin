@@ -15,9 +15,9 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.IVersionReader;
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.ValidAndInvalidClassifier;
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.VersionReaderException;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.IVersionReader;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.ValidAndInvalidClassifier;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.VersionReaderException;
 
 /**
  * Maven Central offers a search service located at {@link #REPO_SEARCH_SERVICE_URL} which can be used to query the

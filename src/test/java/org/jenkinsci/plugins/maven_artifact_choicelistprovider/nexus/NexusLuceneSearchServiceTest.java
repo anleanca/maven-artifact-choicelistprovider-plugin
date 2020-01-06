@@ -4,9 +4,8 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.ValidAndInvalidClassifier;
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.VersionReaderException;
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.nexus.NexusLuceneSearchService;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.ValidAndInvalidClassifier;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.VersionReaderException;
 import org.junit.After;
 import org.junit.Test;
 

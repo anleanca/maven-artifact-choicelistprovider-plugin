@@ -7,9 +7,9 @@ import java.util.logging.Logger;
 import javax.ws.rs.POST;
 
 import org.apache.commons.lang.StringUtils;
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.AbstractMavenArtifactChoiceListProvider;
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.AbstractMavenArtifactDescriptorImpl;
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.IVersionReader;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.AbstractMavenArtifactChoiceListProvider;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.AbstractMavenArtifactDescriptorImpl;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.IVersionReader;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
@@ -28,7 +28,6 @@ import hudson.model.Job;
 import hudson.security.ACL;
 import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
-import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
 
 public class NexusChoiceListProvider extends AbstractMavenArtifactChoiceListProvider {

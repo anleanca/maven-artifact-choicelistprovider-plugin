@@ -2,9 +2,9 @@ package org.jenkinsci.plugins.maven_artifact_choicelistprovider.central;
 
 import java.util.Map;
 
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.AbstractMavenArtifactChoiceListProvider;
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.AbstractMavenArtifactDescriptorImpl;
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.IVersionReader;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.AbstractMavenArtifactChoiceListProvider;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.AbstractMavenArtifactDescriptorImpl;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.IVersionReader;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 

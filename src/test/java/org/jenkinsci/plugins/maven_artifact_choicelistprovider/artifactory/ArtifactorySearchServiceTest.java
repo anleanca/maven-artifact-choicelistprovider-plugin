@@ -3,8 +3,8 @@ package org.jenkinsci.plugins.maven_artifact_choicelistprovider.artifactory;
 import java.util.List;
 import java.util.Set;
 
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.ValidAndInvalidClassifier;
-import org.jenkinsci.plugins.maven_artifact_choicelistprovider.VersionReaderException;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.ValidAndInvalidClassifier;
+import org.jenkinsci.plugins.maven_artifact_choicelistprovider.common.VersionReaderException;
 import org.junit.After;
 import org.junit.Test;
 
@@ -41,7 +41,7 @@ public class ArtifactorySearchServiceTest extends TestCase {
 	public void testExplicitQualifierAndOutputFilter() throws VersionReaderException {
 		ArtifactorySearchService s = new ArtifactorySearchService("https://repo.jenkins-ci.org/");
 		List<String> retrieveVersions = s.retrieveVersions("", "org.jenkins-ci.plugins",
-				"maven-artifact-choicelistprovider", "pom", ValidAndInvalidClassifier.getDefault(),"-2|-3|30|-20");
+				"maven-artifact-choicelistprovider", "hpi", ValidAndInvalidClassifier.getDefault(),"{\"sort\":\"-2\", \"split\":\"/\", \"output\":[\"-2\",\"-3\"], \"delimiter\":\"|\"}");
 		for (String current : retrieveVersions) {
 			System.out.println(current);
 		}
